@@ -1,0 +1,9 @@
+Microservice:
+   Name: hojadevida
+   SecretKey: string_secret_key
+   Port: 9094
+
+Production:
+   Status: false
+   FullPATH: ruta/fullchain.pem
+   PrivPATH: ruta/privkey.pem

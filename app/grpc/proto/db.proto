@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "./proto";
+
+import "google/api/annotations.proto";
+
+message Request {
+  string query = 1;
+  string data = 2;
+}
+
+message Response {
+  string json = 1;
+}
+
+service ServiceDB {
+  rpc Connection(Request) returns (Response) {
+    option (google.api.http) = {
+      post: "/db"
+      body: "*"
+    };
+  }
+}
