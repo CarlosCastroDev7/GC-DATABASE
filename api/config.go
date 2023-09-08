@@ -9,8 +9,8 @@ import (
 type Api struct {
 	IP         string
 	Production bool
-	FullPATH   string
-	PrivPATH   string
+	CertFile   string
+	KeyFile    string
 	Rest       RESTApi
 	GRPC       GRPCApi
 }
@@ -23,53 +23,24 @@ type GRPCApi struct {
 	Port int
 }
 
-func (Api) InitConfig() error {
+func (api *Api) initConfig() error {
 
-	config := Api{
-		IP:         "127.0.0.1",
-		Production: viper.GetBool("Production.Status"),
-		FullPATH:   viper.GetString("Production.FullPATH"),
-		PrivPATH:   viper.GetString("Production.PrivPATH"),
-		Rest:       RESTApi{Port: viper.GetInt("Microservice.Port")},
-		GRPC:       GRPCApi{Port: viper.GetInt("ProtoGRPC.Port")},
+	api.IP = "127.0.0.1"
+	api.Production = viper.GetBool("Production.Status")
+	api.CertFile = viper.GetString("Production.FullPATH")
+	api.KeyFile = viper.GetString("Production.PrivPATH")
+	api.Rest.Port = viper.GetInt("Microservice.Port")
+	api.GRPC.Port = viper.GetInt("ProtoGRPC.Port")
+
+	if api.GRPC.Port == 0 || api.Rest.Port == 0 {
+		return fmt.Errorf("no se registro puerto GRPC o REST en el archivo settings.yaml")
 	}
 
-	if config.GRPC.Port == 0 || config.Rest.Port == 0 {
-		return fmt.Errorf("no se registro puerto en el archivo settings.yaml")
-	}
-
-	if config.Production {
-		if config.FullPATH == "" || config.PrivPATH == "" {
+	if api.Production {
+		if api.CertFile == "" || api.KeyFile == "" {
 			return fmt.Errorf("faltan las llaves para un estado productivo de la api, sobre el archivo settings.yaml")
 		}
 	}
 
 	return nil
 }
-
-// func startGRPCServer(address, certFile, keyFile string) error {
-// 	lis, err := net.Listen("tcp", address)
-// 	if err != nil {
-// 		return fmt.Errorf("failed to listen: %v", err)
-// 	}
-
-// 	s := h.Server{}
-
-// 	creds, err := credentials.NewServerTLSFromFile(certFile, keyFile)
-// 	if err != nil {
-// 		return fmt.Errorf("could not load TLS keys: %s", err)
-// 	}
-
-// 	opts := []grpc.ServerOption{grpc.Creds(creds), grpc.UnaryInterceptor(unaryInterceptor)}
-
-// 	grpcServer := grpc.NewServer(opts...)
-
-// 	dbproto.RegisterDBServiceServer(grpcServer, &s)
-
-// 	log.Printf("Start HTTP/2 gRPC server on: %s", address)
-// 	if err := grpcServer.Serve(lis); err != nil {
-// 		return fmt.Errorf("failed to serve: %s", err)
-// 	}
-
-// 	return nil
-// }

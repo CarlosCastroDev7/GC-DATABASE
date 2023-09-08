@@ -1,9 +1,13 @@
+
 Microservice:
-   Name: hojadevida
-   SecretKey: string_secret_key
-   Port: 9094
+  Name: Micro-Database
+  Version: 0.0.0
+  Port: 9701
 
 Production:
-   Status: false
-   FullPATH: ruta/fullchain.pem
-   PrivPATH: ruta/privkey.pem
+  Status: false
+  FullPATH: key/server.crt   # ruta/fullchain.pem
+  PrivPATH: key/server.key   # ruta/privkey.pem
+
+ProtoGRPC:
+  Port: 9702

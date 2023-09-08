@@ -4,6 +4,7 @@ go 1.20
 
 require (
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.17.1
+	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/cobra v1.7.0
 	github.com/spf13/viper v1.16.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20230822172742-b8732ec3820d
